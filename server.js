@@ -1,3 +1,4 @@
+require("dotenv").config(); // Environment Variable ko Read karne ke liye
 const express = require("express");
 const nodemailer = require("nodemailer");
 const cors = require("cors");
@@ -8,28 +9,36 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+const PORT = process.env.PORT || 3000;
+
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "sumit36335@gmail.com", // Your Gmail ID
-    pass: "Sumit@0924sumit",    // Your Gmail App Password
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS,
   },
 });
+
 app.get("/", (req, res) => {
   res.send("Backend Server is Running Successfully ✅");
 });
+
 app.post("/submitComplaint", async (req, res) => {
   const { name, address, phone, complaint } = req.body;
 
+  if (!name || !address || !phone || !complaint) {
+    return res.status(400).send({ message: "Please fill all fields" });
+  }
+
   try {
     await transporter.sendMail({
-      from: "sumit36335@gmail.com",
+      from: process.env.GMAIL_USER,
       to: ["poojakumari200059@gmail.com", "vishalsinghboom@gmail.com"],
       subject: "New Colony Complaint",
       text: `Name: ${name}\nAddress: ${address}\nPhone: ${phone}\nComplaint: ${complaint}`,
     });
 
-    const apiKey = "YOUR_FAST2SMS_API_KEY";
+    const apiKey = process.env.FAST2SMS_API_KEY;
     await axios.get(
       `https://www.fast2sms.com/dev/bulkV2?authorization=${apiKey}&message=Complaint from ${name}, ${complaint}&route=v3&numbers=XXXXXXXXXX,XXXXXXXXXX`
     );
@@ -41,6 +50,6 @@ app.post("/submitComplaint", async (req, res) => {
   }
 });
 
-app.listen(3000, () => {
-  console.log("Server running on port 3000");
+app.listen(PORT, () => {
+  console.log(`✅ Server running on port ${PORT}`);
 });
