@@ -15,7 +15,9 @@ const transporter = nodemailer.createTransport({
     pass: "Sumit@0924sumit",    // Your Gmail App Password
   },
 });
-
+app.get("/", (req, res) => {
+  res.send("Backend Server is Running Successfully ✅");
+});
 app.post("/submitComplaint", async (req, res) => {
   const { name, address, phone, complaint } = req.body;
 
