@@ -38,7 +38,7 @@ app.post("/submitComplaint", async (req, res) => {
       text: `Name: ${name}\nAddress: ${address}\nPhone: ${phone}\nComplaint: ${complaint}`,
     });
 
-    const apiKey = process.env.FAST2SMS_API_KEY;
+    const apiKey = "fw0snmQpJrLXah...";
     await axios.get(
       `https://www.fast2sms.com/dev/bulkV2?authorization=${apiKey}&message=Complaint from ${name}, ${complaint}&route=v3&numbers=XXXXXXXXXX,XXXXXXXXXX`
     );
