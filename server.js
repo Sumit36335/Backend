@@ -1,5 +1,4 @@
 require("dotenv").config(); // Environment Variable ko Read karne ke liye
-app.use(cors({ origin: "*" }));
 const express = require("express");
 const nodemailer = require("nodemailer");
 const cors = require("cors");
